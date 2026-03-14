@@ -30,11 +30,12 @@ export type {
 
 export { ResultApiService, createResultApi } from './resultApi';
 export type {
-  BreathTestData,
-  SubmitBreathTestRequest,
-  SubmitBreathTestResponse,
-  TestResult,
-  ResultQueryParams,
+  BreathalyzerStatus,
+  ActivateBreathalyzerRequest,
+  ActivateBreathalyzerResponse,
+  BreathalyzerStatusResponse,
+  SubmitBreathResultRequest,
+  SubmitBreathResultResponse,
 } from './resultApi';
 
 // Import for API service aggregation

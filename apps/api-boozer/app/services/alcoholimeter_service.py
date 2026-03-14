@@ -1,8 +1,12 @@
 import uuid
 import asyncio
 import logging
-import serial
 from app.services.payment_service import transaction_db
+
+try:
+    import serial
+except ModuleNotFoundError:  # pragma: no cover - fallback for mock/dev mode
+    serial = None
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +14,12 @@ class AlcoholimeterService:
     def __init__(self):
         self.port = "/dev/ttyUSB0"
         self.baudrate = 9600
+        self.serial_conn = None
         
+        if serial is None:
+            logger.warning("pyserial is not installed. Alcoholimeter will run in mock mode.")
+            return
+
         try:
             self.serial_conn = serial.Serial(self.port, self.baudrate, timeout=1)
             logger.info(f"Connected to hardware on {self.port}")
