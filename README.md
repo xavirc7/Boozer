@@ -104,6 +104,16 @@ Boozer
    - `http://localhost:8000/health`
    - `http://localhost:8000/docs`
 
+4. Database creation (with the virtual environment activated):
+   Generate the migration scripts:
+   ```bash
+   alembic revision --autogenerate -m "initial_migration"
+   ```
+
+   Execute the migration scripts:
+   ```bash
+   alembic upgrade head
+   ```
 ---
 
 ## 🔌 Frontend ↔ Backend Communication

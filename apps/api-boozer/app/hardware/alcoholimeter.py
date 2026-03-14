@@ -1,0 +1,1 @@
+# Logic to read serial/GPIO data from the MQ-3 sensor

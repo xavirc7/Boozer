@@ -1,0 +1,1 @@
+# Shared stuff like database sessions or auth checking

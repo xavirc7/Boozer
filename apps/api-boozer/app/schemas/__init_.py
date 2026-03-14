@@ -1,0 +1,1 @@
+# Use Pydantic to validate the JSON data coming from the front end before it touches the DB
