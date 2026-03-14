@@ -1,0 +1,69 @@
+@import '../../styles/tokens.css';
+
+.container {
+  width: 100%;
+}
+
+.barWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.barBackground {
+  position: relative;
+  border-radius: var(--radius-pill);
+  background: rgba(7, 12, 21, 0.88);
+  border: 2px solid currentColor;
+  overflow: hidden;
+}
+
+.variant-cyan {
+  color: var(--color-neon-cyan-bright);
+  border-color: var(--color-neon-cyan-bright);
+}
+
+.variant-cyan .barFill {
+  background: linear-gradient(
+    90deg,
+    var(--color-neon-cyan-bright) 0%,
+    rgba(91, 183, 255, 0.95) 45%,
+    var(--color-neon-magenta-bright) 100%
+  );
+  box-shadow: 0 0 18px rgba(35, 242, 255, 0.24);
+}
+
+.barFill {
+  position: relative;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.1s linear;
+}
+
+.barFill.animated {
+  transition: width var(--transition-smooth);
+}
+
+.glowInner {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  animation: shimmer 2.2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.label,
+.glowOuter,
+.percentageText,
+.variant-magenta,
+.variant-lime {
+  display: none;
+}

@@ -1,0 +1,59 @@
+@import '../../styles/tokens.css';
+
+/**
+ * CountdownScreen - Dramatic preparation moment
+ * Massive countdown with physical intensity and visual drama
+ */
+
+.countdownContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: center;
+}
+
+.countdownLabel {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.3rem, 3vw, 2.6rem);
+  color: rgba(238, 247, 255, 0.88);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: var(--font-weight-bold);
+}
+
+.countdownIcon {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  margin-bottom: 0.3rem;
+}
+
+.countdownNumber {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(8rem, 20vw, 18rem);
+  font-weight: var(--font-weight-black);
+  color: var(--color-neon-cyan-bright);
+  text-shadow: var(--glow-cyan-strong);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.readyText {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  color: var(--color-neon-cyan-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: var(--font-weight-black);
+  text-shadow: var(--glow-cyan-strong);
+}
+
+@media (max-width: 768px) {
+  .countdownNumber {
+    font-size: clamp(5rem, 24vw, 8rem);
+  }
+}

@@ -1,0 +1,133 @@
+@import '../../styles/tokens.css';
+
+/**
+ * PlayerNameScreen - Gamer tag input with suggestions
+ * Input field is primary focus, suggestions are secondary
+ */
+
+.inputSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 760px;
+}
+
+.textInput {
+  width: 100%;
+  min-height: 120px;
+  padding: 1.5rem 2rem;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: var(--font-weight-bold);
+  border: 2px solid rgba(35, 242, 255, 0.75);
+  border-radius: var(--radius-lg);
+  background: rgba(8, 12, 22, 0.82);
+  color: rgba(238, 247, 255, 0.92);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  outline: none;
+  transition: all var(--transition-smooth);
+  box-shadow: inset 0 0 0 1px rgba(35, 242, 255, 0.08), 0 0 18px rgba(35, 242, 255, 0.14);
+}
+
+.textInput:focus {
+  box-shadow: 0 0 26px rgba(35, 242, 255, 0.18), inset 0 0 18px rgba(35, 242, 255, 0.08);
+}
+
+.textInput::placeholder {
+  color: rgba(193, 204, 217, 0.28);
+}
+
+.suggestionsSection {
+  width: 100%;
+}
+
+.suggestionLabel {
+  margin: 0 0 0.9rem;
+  text-align: center;
+  font-family: var(--font-family-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  color: var(--color-text-tertiary);
+}
+
+.suggestionsContainer {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.suggestionChip {
+  min-height: 58px;
+  padding: 0.65rem 1rem;
+  font-family: var(--font-family-display);
+  font-size: 0.8rem;
+  border: 2px solid rgba(35, 242, 255, 0.65);
+  border-radius: var(--radius-pill);
+  background: rgba(7, 12, 21, 0.82);
+  color: rgba(238, 247, 255, 0.92);
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  transition: all var(--transition-normal);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.suggestionChip:hover {
+  box-shadow: 0 0 18px rgba(35, 242, 255, 0.16);
+}
+
+.suggestionChip:active {
+  transform: scale(0.99);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 0.75rem;
+  justify-content: center;
+}
+
+.continueBtn {
+  flex: 1;
+  min-width: 0;
+}
+
+.skipBtn {
+  flex: 1;
+  min-width: 0;
+}
+
+.continueButton,
+.skipButton {
+  min-height: 74px;
+}
+
+@media (max-width: 768px) {
+  .textInput {
+    min-height: 90px;
+    padding: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .suggestionsContainer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .suggestionChip {
+    min-height: 52px;
+    font-size: 0.72rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+  }
+}

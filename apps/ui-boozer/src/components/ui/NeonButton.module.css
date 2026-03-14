@@ -1,0 +1,120 @@
+@import '../../styles/tokens.css';
+
+/**
+ * NeonButton - Neon arcade-style buttons
+ * Large, touch-friendly with strong visual feedback
+ */
+
+.button {
+  min-height: 72px;
+  padding: 0.95rem 1.8rem;
+  font-family: var(--font-family-display);
+  font-size: clamp(1rem, 1.8vw, 1.45rem);
+  font-weight: var(--font-weight-bold);
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  position: relative;
+  overflow: hidden;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  background: rgba(4, 8, 16, 0.72);
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.button:hover::before {
+  transform: translateX(120%);
+  transition: transform 700ms ease;
+}
+
+.primary {
+  background: linear-gradient(180deg, #24f0ff 0%, #19d7f0 100%);
+  color: #07111b;
+  border-color: var(--color-neon-cyan-bright);
+  box-shadow: 0 0 22px var(--color-neon-cyan-shadow);
+}
+
+.primary:hover:not(.disabled) {
+  box-shadow: 0 0 32px var(--color-neon-cyan-shadow),
+    0 0 56px rgba(35, 242, 255, 0.24);
+  transform: translateY(-1px);
+}
+
+.primary:active:not(.disabled) {
+  transform: scale(0.985);
+}
+
+.secondary {
+  background: rgba(6, 10, 18, 0.74);
+  color: var(--color-neon-magenta-bright);
+  border-color: rgba(255, 43, 191, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(255, 43, 191, 0.12),
+    0 0 20px rgba(255, 43, 191, 0.16);
+}
+
+.secondary:hover:not(.disabled) {
+  color: #ff6cd1;
+  box-shadow: inset 0 0 0 1px rgba(255, 43, 191, 0.18),
+    0 0 26px rgba(255, 43, 191, 0.22);
+  transform: translateY(-1px);
+}
+
+.secondary:active:not(.disabled) {
+  transform: scale(0.985);
+}
+
+.danger {
+  background: rgba(6, 10, 18, 0.74);
+  color: rgba(238, 247, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.danger:hover:not(.disabled) {
+  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.danger:active:not(.disabled) {
+  transform: scale(0.985);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.buttonText {
+  position: relative;
+  z-index: 1;
+  display: block;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 768px) {
+  .button {
+    min-height: 58px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}

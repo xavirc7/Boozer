@@ -1,0 +1,69 @@
+@import '../../styles/tokens.css';
+
+/**
+ * FinalScreen - Closing the Loop
+ * Echoes AttractScreen aesthetic, strong branding for replay invitation
+ * Bookends the experience back to idle state
+ */
+
+.finalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 780px;
+  text-align: center;
+}
+
+.celebrationEmoji {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+}
+
+.finalMessage {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-neon-cyan-bright);
+  text-shadow: var(--glow-cyan-strong);
+}
+
+.subMessage {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(0.9rem, 1.8vw, 1.15rem);
+  color: rgba(206, 216, 224, 0.72);
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+}
+
+.restartButton {
+  min-height: 76px;
+  margin-top: 0.6rem;
+  padding: 0.95rem 2rem;
+  font-family: var(--font-family-display);
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: var(--font-weight-bold);
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: linear-gradient(180deg, #24f0ff 0%, #19d7f0 100%);
+  color: #07111b;
+  box-shadow: 0 0 24px rgba(35, 242, 255, 0.24);
+}
+
+.restartButton:hover:not(:disabled) {
+  box-shadow: 0 0 34px rgba(35, 242, 255, 0.32);
+}
+
+@media (max-width: 768px) {
+  .restartButton {
+    width: 100%;
+  }
+}

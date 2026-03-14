@@ -1,0 +1,166 @@
+@import '../../styles/tokens.css';
+
+.paymentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 520px;
+}
+
+.cardIcon {
+  font-size: clamp(2rem, 4vw, 3rem);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.1));
+}
+
+.priceCard {
+  width: 100%;
+  min-height: 170px;
+  background: rgba(7, 12, 21, 0.8);
+  border: 2px solid rgba(35, 242, 255, 0.75);
+  border-radius: var(--radius-2xl);
+  padding: 1.8rem;
+  text-align: center;
+  box-shadow: inset 0 0 0 1px rgba(35, 242, 255, 0.08), 0 0 26px rgba(35, 242, 255, 0.16);
+}
+
+.priceAmount {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-weight: var(--font-weight-black);
+  color: var(--color-neon-cyan-bright);
+  text-shadow: var(--glow-cyan-strong), 0 0 40px rgba(35, 242, 255, 0.18);
+  letter-spacing: 0.04em;
+}
+
+.instructionsContainer {
+  text-align: center;
+  width: 100%;
+}
+
+.instructionTitle {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  color: var(--color-neon-cyan-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--font-weight-bold);
+}
+
+.instructionText {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-family-display);
+  font-size: 0.88rem;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.16em;
+}
+
+.buttonGroup {
+  width: 100%;
+  max-width: 320px;
+}
+
+.actionButton {
+  width: 100%;
+  min-height: 60px;
+  padding: 0.8rem 1rem;
+  font-family: var(--font-family-display);
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.retryButton {
+  background: linear-gradient(180deg, #24f0ff 0%, #19d7f0 100%);
+  color: #07111b;
+  border: none;
+}
+
+.errorMessage {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 49, 49, 0.08);
+  border: 1px solid rgba(255, 49, 49, 0.4);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  text-align: center;
+  box-shadow: 0 0 18px rgba(255, 49, 49, 0.12);
+}
+
+.errorText {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: 0.8rem;
+  color: var(--color-neon-red-bright);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.processingIndicator {
+  text-align: center;
+}
+
+.processingDots {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 0.7rem;
+}
+
+.processingDots span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(35, 242, 255, 0.72);
+  box-shadow: 0 0 12px rgba(35, 242, 255, 0.18);
+  animation: blink 1s ease-in-out infinite;
+}
+
+.processingDots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.processingDots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.processingText {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: 0.86rem;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .priceCard {
+    min-height: 136px;
+  }
+
+  .priceAmount {
+    font-size: 3.4rem;
+  }
+
+  .actionButton {
+    min-height: 54px;
+  }
+}

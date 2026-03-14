@@ -1,0 +1,154 @@
+@import '../../styles/tokens.css';
+
+/**
+ * NeonCard - Neon arcade-style cards
+ * Dark panel with cyan border and selected state
+ */
+
+.card {
+  background: rgba(6, 10, 18, 0.72);
+  border: 2px solid rgba(35, 242, 255, 0.65);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: all var(--transition-smooth);
+  box-shadow: inset 0 0 0 1px rgba(35, 242, 255, 0.08), 0 0 18px rgba(35, 242, 255, 0.16);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-family-display);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(35, 242, 255, 0.05), transparent 40%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.cardContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  text-align: center;
+}
+
+.cardIcon {
+  flex-shrink: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  min-height: 64px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15));
+}
+
+.cardText {
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neon-cyan-bright);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: var(--glow-cyan-soft);
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0.15em;
+  line-height: 1.4;
+}
+
+.clickable {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clickable:hover {
+  border-color: var(--color-neon-cyan-bright);
+  box-shadow: 0 0 26px rgba(35, 242, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.clickable:active {
+  transform: scale(0.99);
+}
+
+.magenta {
+  border-color: rgba(255, 43, 191, 0.65);
+  box-shadow: inset 0 0 0 1px rgba(255, 43, 191, 0.08), 0 0 18px rgba(255, 43, 191, 0.14);
+}
+
+.magenta::before {
+  background: linear-gradient(180deg, rgba(255, 43, 191, 0.06), transparent 40%);
+}
+
+.magenta .title {
+  color: #ff55ca;
+  text-shadow: var(--glow-magenta-soft);
+}
+
+.magenta.clickable:hover {
+  border-color: var(--color-neon-magenta-bright);
+  box-shadow: 0 0 26px rgba(255, 43, 191, 0.22);
+}
+
+.selected {
+  border-color: var(--color-neon-cyan-bright);
+  box-shadow: 0 0 28px rgba(35, 242, 255, 0.24), inset 0 0 20px rgba(35, 242, 255, 0.08);
+}
+
+.magenta.selected {
+  border-color: var(--color-neon-magenta-bright);
+  box-shadow: 0 0 28px rgba(255, 43, 191, 0.24), inset 0 0 20px rgba(255, 43, 191, 0.08);
+}
+
+.selectedIndicator {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.95rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  background: var(--color-neon-cyan-bright);
+  color: #07111b;
+  box-shadow: 0 0 14px rgba(35, 242, 255, 0.35);
+}
+
+@media (max-width: 900px) {
+  .card {
+    min-height: 140px;
+    padding: 1.2rem;
+  }
+
+  .cardIcon {
+    font-size: 2rem;
+    min-width: 56px;
+    min-height: 56px;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+}

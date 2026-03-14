@@ -1,0 +1,30 @@
+@import '../../styles/tokens.css';
+
+/**
+ * GameModeScreen - Mode selection with visual separation
+ * Solo vs Group with clear, distinct choices
+ */
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 860px;
+}
+
+.continueButton {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+.continueCta {
+  min-height: 66px;
+}
+
+@media (max-width: 768px) {
+  .cardGrid {
+    gap: 1rem;
+  }
+}

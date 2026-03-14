@@ -1,0 +1,80 @@
+@import '../../styles/tokens.css';
+
+/**
+ * ProcessingScreen - Digital machine moment
+ * Intense calculation with red neon scanner feeling
+ */
+
+.processingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.processingLabel {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: rgba(238, 247, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: var(--font-weight-bold);
+}
+
+.previewValue {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(5rem, 14vw, 10rem);
+  line-height: 1;
+  color: var(--color-neon-red-bright);
+  text-shadow: var(--glow-red-strong);
+}
+
+.previewUnit {
+  font-size: 0.2em;
+  color: rgba(226, 230, 236, 0.8);
+  margin-left: 0.12em;
+}
+
+.loaderDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-neon-red-bright);
+  box-shadow: 0 0 12px rgba(255, 49, 49, 0.22);
+  animation: pulseLoader 1.1s infinite ease-in-out;
+}
+
+@keyframes pulseLoader {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animatedLoader {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.analyzeText {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+  color: rgba(171, 182, 192, 0.42);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: var(--font-weight-bold);
+}
+
+@media (max-width: 768px) {
+  .previewValue {
+    font-size: clamp(4rem, 18vw, 6.4rem);
+  }
+}

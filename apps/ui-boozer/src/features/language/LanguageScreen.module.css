@@ -1,0 +1,32 @@
+@import '../../styles/tokens.css';
+
+/**
+ * LanguageScreen - Clean language selection panel
+ * Grid of selection cards with immediate readability
+ */
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 320px));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 720px;
+  justify-content: center;
+}
+
+.continueButton {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+.continueCta {
+  min-height: 66px;
+}
+
+@media (max-width: 768px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+}

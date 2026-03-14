@@ -1,0 +1,118 @@
+@import '../../styles/tokens.css';
+
+/**
+ * BlowScreen - Dynamic breath test moment
+ * Real-time progress visualization with energetic feedback
+ */
+
+.blowContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  width: 100%;
+  max-width: 820px;
+  text-align: center;
+}
+
+.instruction {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-3xl);
+  color: var(--color-neon-magenta-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--font-weight-black);
+  text-shadow: var(--glow-magenta-medium);
+}
+
+.visualizer {
+  position: relative;
+  width: 220px;
+  height: 170px;
+}
+
+.breathIcon {
+  position: relative;
+  z-index: 2;
+  font-size: 2.8rem;
+  margin-top: 0.6rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.16));
+}
+
+.bars {
+  position: absolute;
+  inset: 36px 20px 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+
+.bar {
+  width: 10px;
+  border-radius: var(--radius-pill);
+  height: 52px;
+  background: rgba(35, 242, 255, 0.28);
+  box-shadow: inset 0 0 8px rgba(35, 242, 255, 0.08);
+}
+
+.bar:nth-child(2),
+.bar:nth-child(7) {
+  height: 70px;
+}
+
+.bar:nth-child(3),
+.bar:nth-child(6) {
+  height: 88px;
+}
+
+.bar:nth-child(4),
+.bar:nth-child(5) {
+  height: 108px;
+}
+
+.barActive {
+  background: linear-gradient(180deg, #7effff 0%, #23f2ff 100%);
+  box-shadow: 0 0 12px rgba(35, 242, 255, 0.3);
+}
+
+.progressContainer {
+  width: min(100%, 720px);
+}
+
+.progressBar {
+  width: 100%;
+}
+
+.progressText {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: rgba(238, 247, 255, 0.9);
+  letter-spacing: 0.04em;
+}
+
+.statusLabel {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+  color: rgba(171, 182, 192, 0.36);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+  .instruction {
+    font-size: 2rem;
+  }
+
+  .visualizer {
+    transform: scale(0.82);
+  }
+
+  .progressText {
+    font-size: 1.6rem;
+  }
+}

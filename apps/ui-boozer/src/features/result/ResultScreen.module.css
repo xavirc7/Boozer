@@ -1,0 +1,155 @@
+@import '../../styles/tokens.css';
+
+/**
+ * ResultScreen - The Payoff Moment
+ * Massive BAC number dominates the display, intense result feedback
+ */
+
+.resultContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  text-align: center;
+}
+
+.emoji {
+  margin: 0 0 0.4rem;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+}
+
+.bacValue {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(5.5rem, 16vw, 10rem);
+  font-weight: var(--font-weight-black);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.unit {
+  margin-left: 0.12em;
+  font-size: 0.22em;
+  color: rgba(226, 230, 236, 0.8);
+}
+
+.bacValue.safe {
+  color: var(--color-status-safe);
+  text-shadow: 0 0 36px var(--color-status-safe-shadow);
+}
+
+.bacValue.warning {
+  color: var(--color-status-warning);
+  text-shadow: 0 0 36px var(--color-status-warning-shadow);
+}
+
+.bacValue.stop {
+  color: var(--color-status-stop);
+  text-shadow: 0 0 36px var(--color-status-stop-shadow);
+}
+
+.resultLabel {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(1.7rem, 5vw, 3rem);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.resultLabel.safe {
+  color: var(--color-status-safe);
+  text-shadow: 0 0 16px var(--color-status-safe-shadow);
+}
+
+.resultLabel.warning {
+  color: var(--color-status-warning);
+  text-shadow: 0 0 16px var(--color-status-warning-shadow);
+}
+
+.resultLabel.stop {
+  color: var(--color-status-stop);
+  text-shadow: 0 0 16px var(--color-status-stop-shadow);
+}
+
+.messageText {
+  margin: 0.15rem 0 0.6rem;
+  font-family: var(--font-family-display);
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
+  color: rgba(206, 216, 224, 0.72);
+  letter-spacing: 0.08em;
+  text-align: center;
+  max-width: 540px;
+}
+
+.utilityButtons {
+  display: flex;
+  gap: 1rem;
+  width: min(100%, 700px);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.shareBtn,
+.rankingBtn,
+.finishBtn,
+.tryAgainBtn {
+  min-height: 76px;
+  padding: 0.95rem 1.5rem;
+  font-family: var(--font-family-display);
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(7, 12, 21, 0.78);
+}
+
+.shareBtn {
+  border: 2px solid rgba(255, 43, 191, 0.75);
+  color: #ff5acb;
+  min-width: 250px;
+}
+
+.rankingBtn {
+  border: 2px solid rgba(35, 242, 255, 0.75);
+  color: var(--color-neon-cyan-bright);
+  min-width: 250px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: min(100%, 700px);
+  flex-wrap: wrap;
+}
+
+.finishBtn {
+  background: linear-gradient(180deg, #24f0ff 0%, #19d7f0 100%);
+  color: #07111b;
+  border: none;
+  min-width: 250px;
+}
+
+.tryAgainBtn {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(238, 247, 255, 0.86);
+  min-width: 160px;
+}
+
+@media (max-width: 768px) {
+  .bacValue {
+    font-size: clamp(4rem, 22vw, 6.4rem);
+  }
+
+  .utilityButtons,
+  .finishBtn,
+  .tryAgainBtn,
+  .buttonGroup {
+    width: 100%;
+  }
+}

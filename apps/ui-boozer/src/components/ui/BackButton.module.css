@@ -1,0 +1,42 @@
+.backButton {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  min-height: 44px;
+  padding: 0.55rem 1rem;
+  font-family: var(--font-family-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(5, 9, 18, 0.78);
+  color: rgba(235, 246, 255, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: all 0.3s ease;
+  outline: none;
+  z-index: 100;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.24);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.backButton:hover {
+  border-color: rgba(35, 242, 255, 0.5);
+  color: var(--color-neon-cyan-bright);
+  box-shadow: 0 0 16px rgba(35, 242, 255, 0.12);
+}
+
+.backButton:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .backButton {
+    top: 14px;
+    left: 14px;
+    min-height: 40px;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.7rem;
+  }
+}

@@ -1,0 +1,99 @@
+@import '../../styles/tokens.css';
+
+/**
+ * ScreenShell - Base layout for all screens
+ * Provides consistent spacing, vertical rhythm, and arcade aesthetic
+ * Content is vertically centered with clear visual hierarchy
+ */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  position: relative;
+  font-family: var(--font-family-fallback);
+  padding: clamp(1.25rem, 2vw, 2rem);
+}
+
+.header {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: clamp(0.75rem, 1.8vw, 1.25rem) 0 0;
+  text-align: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(2.2rem, 4.8vw, 4.8rem);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-neon-cyan-bright);
+  text-shadow: var(--glow-cyan-medium), 0 0 24px rgba(35, 242, 255, 0.2);
+  line-height: 1;
+}
+
+.subtitle {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.22em;
+  line-height: 1.4;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(1.25rem, 3vw, 2rem) 0;
+  gap: clamp(1.25rem, 2vw, 2rem);
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.footer {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 0 0 clamp(0.5rem, 1vw, 1rem);
+  text-align: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .shell {
+    padding: 1rem;
+  }
+
+  .header {
+    padding-top: 0.4rem;
+  }
+
+  .title {
+    font-size: clamp(1.8rem, 9vw, 2.7rem);
+  }
+
+  .content {
+    padding: 1rem 0;
+  }
+}
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: clamp(4rem, 4.5vw, 5.4rem);
+  }
+}
