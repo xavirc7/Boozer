@@ -2,42 +2,49 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ScreenShell } from '../../components/layout/ScreenShell'
 import { NeonButton } from '../../components/ui/NeonButton'
-import { BackButton } from '../../components/ui/BackButton'
 import { useSessionStore } from '../../store/sessionStore'
 import { useRouteGuard } from '../../hooks/useRouteGuard'
+import { interpolate, useCopy } from '../../content/useCopy'
 import styles from './PlayerNameScreen.module.css'
-
-const NICKNAME_SUGGESTIONS = [
-  'PARTY KING',
-  'DJ SHOTS',
-  'LOCA',
-  'EL JEFE',
-  'FIESTA',
-  'TEQUILA',
-]
 
 export function PlayerNameScreen() {
   const navigate = useNavigate()
-  const { setPlayerName } = useSessionStore()
+  const { currentPlayerIndex, playerCount, players, setPlayerName } =
+    useSessionStore()
+  const copy = useCopy()
   const [name, setName] = useState('')
 
-  // Protect this route - game mode must be selected
+  // Protect this route - payment must be completed before collecting names
   useRouteGuard({
     requiredState: {
       language: true,
       gameMode: true,
+      paymentCompleted: true,
     },
   })
 
+  const defaultName = interpolate(copy.playerName.defaultNameTemplate, {
+    number: currentPlayerIndex + 1,
+  })
+  const usedNicknames = new Set(
+    players
+      .slice(0, currentPlayerIndex)
+      .map((player) => player.name.trim().toUpperCase())
+      .filter(Boolean)
+  )
+  const availableNicknames = copy.playerName.nicknames.filter(
+    (suggestion) => !usedNicknames.has(suggestion.trim().toUpperCase())
+  )
+
   const handleContinue = () => {
-    const finalName = name.trim() || 'PLAYER'
+    const finalName = name.trim() || defaultName
     setPlayerName(finalName)
-    navigate('/payment')
+    navigate('/countdown')
   }
 
   const handleSkip = () => {
-    setPlayerName('PLAYER')
-    navigate('/payment')
+    setPlayerName(defaultName)
+    navigate('/countdown')
   }
 
   const handleSuggestion = (suggestion: string) => {
@@ -45,59 +52,64 @@ export function PlayerNameScreen() {
   }
 
   return (
-    <>
-      <BackButton to="/mode" />
-      <ScreenShell title="¿CÓMO TE LLAMAMOS?">
-        <div className={styles.inputSection}>
-          <input
-            type="text"
-            className={styles.textInput}
-            value={name}
-            onChange={(e) => setName(e.target.value.toUpperCase())}
-            placeholder="TU NOMBRE..."
-            maxLength={20}
-            autoFocus
-          />
+    <ScreenShell
+      title={copy.playerName.title}
+      subtitle={interpolate(copy.playerName.subtitleTemplate, {
+        current: currentPlayerIndex + 1,
+        total: playerCount,
+      })}
+    >
+      <div className={styles.inputSection}>
+        <input
+          type="text"
+          className={styles.textInput}
+          value={name}
+          onChange={(e) => setName(e.target.value.toUpperCase())}
+          placeholder={copy.playerName.placeholder}
+          maxLength={20}
+          autoFocus
+        />
 
-          <div className={styles.suggestionsSection}>
-            <p className={styles.suggestionLabel}>O ELIGE UNO:</p>
-            <div className={styles.suggestionsContainer}>
-              {NICKNAME_SUGGESTIONS.map((suggestion) => (
-                <button
-                  key={suggestion}
-                  className={styles.suggestionChip}
-                  onClick={() => handleSuggestion(suggestion)}
-                >
-                  {suggestion}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.buttonGroup}>
-            <div className={styles.continueBtn}>
-              <NeonButton
-                variant="danger"
-                className={styles.skipButton}
-                fullWidth
-                onClick={handleSkip}
+        <div className={styles.suggestionsSection}>
+          <p className={styles.suggestionLabel}>
+            {copy.playerName.suggestionLabel}
+          </p>
+          <div className={styles.suggestionsContainer}>
+            {availableNicknames.map((suggestion) => (
+              <button
+                key={suggestion}
+                className={styles.suggestionChip}
+                onClick={() => handleSuggestion(suggestion)}
               >
-                ANÓNIMO
-              </NeonButton>
-            </div>
-            <div className={styles.skipBtn}>
-              <NeonButton
-                variant="primary"
-                className={styles.continueButton}
-                fullWidth
-                onClick={handleContinue}
-              >
-                VAMOS
-              </NeonButton>
-            </div>
+                {suggestion}
+              </button>
+            ))}
           </div>
         </div>
-      </ScreenShell>
-    </>
+
+        <div className={styles.buttonGroup}>
+          <div className={styles.continueBtn}>
+            <NeonButton
+              variant="danger"
+              className={styles.skipButton}
+              fullWidth
+              onClick={handleSkip}
+            >
+              {copy.playerName.anonymous}
+            </NeonButton>
+          </div>
+          <div className={styles.skipBtn}>
+            <NeonButton
+              variant="primary"
+              className={styles.continueButton}
+              fullWidth
+              onClick={handleContinue}
+            >
+              {copy.playerName.goButton}
+            </NeonButton>
+          </div>
+        </div>
+      </div>
+    </ScreenShell>
   )
 }

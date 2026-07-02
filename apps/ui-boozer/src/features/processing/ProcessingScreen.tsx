@@ -4,11 +4,13 @@ import { ScreenShell } from '../../components/layout/ScreenShell'
 import { useRouteGuard } from '../../hooks/useRouteGuard'
 import { useSessionStore } from '../../store/sessionStore'
 import { mapBacToResult } from '../../utils/resultMapper'
+import { useCopy } from '../../content/useCopy'
 import styles from './ProcessingScreen.module.css'
 
 export function ProcessingScreen() {
   const navigate = useNavigate()
   const { result, setResultLabel } = useSessionStore()
+  const copy = useCopy()
   const [displayValue, setDisplayValue] = useState('0.00')
 
   useRouteGuard({
@@ -54,11 +56,11 @@ export function ProcessingScreen() {
   return (
     <ScreenShell>
       <div className={styles.processingContainer}>
-        <p className={styles.processingLabel}>ANALIZANDO...</p>
+        <p className={styles.processingLabel}>{copy.processing.label}</p>
 
         <p className={styles.previewValue}>
           {displayValue}
-          <span className={styles.previewUnit}>g/l</span>
+          <span className={styles.previewUnit}>{copy.common.unit}</span>
         </p>
 
         <div className={styles.animatedLoader}>
@@ -67,7 +69,7 @@ export function ProcessingScreen() {
           <div className={styles.loaderDot}></div>
         </div>
 
-        <p className={styles.analyzeText}>CALCULANDO TU NIVEL</p>
+        <p className={styles.analyzeText}>{copy.processing.analyzeText}</p>
       </div>
     </ScreenShell>
   )

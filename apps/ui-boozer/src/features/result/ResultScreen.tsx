@@ -3,11 +3,13 @@ import { ScreenShell } from '../../components/layout/ScreenShell'
 import { useRouteGuard } from '../../hooks/useRouteGuard'
 import { useSessionStore } from '../../store/sessionStore'
 import { mapBacToResult } from '../../utils/resultMapper'
+import { useCopy } from '../../content/useCopy'
 import styles from './ResultScreen.module.css'
 
 export function ResultScreen() {
   const navigate = useNavigate()
   const { result } = useSessionStore()
+  const copy = useCopy()
 
   useRouteGuard({
     requiredState: {
@@ -31,12 +33,8 @@ export function ResultScreen() {
       : mappedResult.label === 'WARNING'
         ? '🥴'
         : '🤪'
-  const resultTitle =
-    mappedResult.label === 'SAFE'
-      ? 'TODO OK'
-      : mappedResult.label === 'WARNING'
-        ? 'OJITO'
-        : 'MUY BORRACHO'
+  const resultTitle = copy.result.titles[mappedResult.label]
+  const resultMessage = copy.result.messages[mappedResult.label]
 
   return (
     <ScreenShell>
@@ -44,36 +42,18 @@ export function ResultScreen() {
         <p className={styles.emoji}>{moodEmoji}</p>
         <p className={`${styles.bacValue} ${styles[labelClass]}`}>
           {mappedResult.bac.toFixed(2)}
-          <span className={styles.unit}>g/l</span>
+          <span className={styles.unit}>{copy.common.unit}</span>
         </p>
 
         <p className={`${styles.resultLabel} ${styles[labelClass]}`}>
           {resultTitle}
         </p>
 
-        <p className={styles.messageText}>{mappedResult.message}</p>
-
-        <div className={styles.utilityButtons}>
-          <button type="button" className={styles.shareBtn}>
-            📱 COMPARTE
-          </button>
-          <button type="button" className={styles.rankingBtn}>
-            🏆 VER RANKING
-          </button>
-        </div>
+        <p className={styles.messageText}>{resultMessage}</p>
 
         <div className={styles.buttonGroup}>
-          <button
-            className={styles.finishBtn}
-            onClick={() => navigate('/countdown')}
-          >
-            OTRA VEZ
-          </button>
-          <button
-            className={styles.tryAgainBtn}
-            onClick={() => navigate('/final')}
-          >
-            FIN
+          <button className={styles.tryAgainBtn} onClick={() => navigate('/final')}>
+            {copy.result.finishButton}
           </button>
         </div>
       </div>

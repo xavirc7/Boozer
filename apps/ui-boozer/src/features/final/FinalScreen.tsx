@@ -2,11 +2,13 @@ import { useNavigate } from 'react-router-dom'
 import { ScreenShell } from '../../components/layout/ScreenShell'
 import { useRouteGuard } from '../../hooks/useRouteGuard'
 import { useSessionStore } from '../../store/sessionStore'
+import { useCopy } from '../../content/useCopy'
 import styles from './FinalScreen.module.css'
 
 export function FinalScreen() {
   const navigate = useNavigate()
   const { resetSession } = useSessionStore()
+  const copy = useCopy()
 
   useRouteGuard({
     requiredState: {
@@ -20,9 +22,9 @@ export function FinalScreen() {
 
   const handleRestart = () => {
     navigate('/', { replace: true })
-    queueMicrotask(() => {
+    window.setTimeout(() => {
       resetSession()
-    })
+    }, 0)
   }
 
   return (
@@ -30,14 +32,12 @@ export function FinalScreen() {
       <div className={styles.finalContainer}>
         <div className={styles.celebrationEmoji}>⚡</div>
 
-        <h1 className={styles.finalMessage}>GRACIAS POR JUGAR</h1>
+        <h1 className={styles.finalMessage}>{copy.final.message}</h1>
 
-        <p className={styles.subMessage}>
-          DISFRUTA LA NOCHE. NO CONDUZCAS SI HAS BEBIDO.
-        </p>
+        <p className={styles.subMessage}>{copy.final.subMessage}</p>
 
         <button className={styles.restartButton} onClick={handleRestart}>
-          VOLVER AL INICIO
+          {copy.final.restartButton}
         </button>
       </div>
     </ScreenShell>

@@ -2,10 +2,10 @@
   position: fixed;
   top: 20px;
   left: 20px;
-  min-height: 44px;
-  padding: 0.55rem 1rem;
+  min-height: 58px;
+  padding: 0.78rem 1.35rem;
   font-family: var(--font-family-display);
-  font-size: 0.78rem;
+  font-size: 0.95rem;
   font-weight: 700;
   background: rgba(5, 9, 18, 0.78);
   color: rgba(235, 246, 255, 0.86);
@@ -35,8 +35,8 @@
   .backButton {
     top: 14px;
     left: 14px;
-    min-height: 40px;
-    padding: 0.45rem 0.8rem;
-    font-size: 0.7rem;
+    min-height: 50px;
+    padding: 0.65rem 1rem;
+    font-size: 0.82rem;
   }
 }

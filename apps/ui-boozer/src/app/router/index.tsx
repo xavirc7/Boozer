@@ -4,12 +4,15 @@ import { RootLayout } from '../RootLayout'
 import { AttractScreen } from '../../features/attract/AttractScreen'
 import { LanguageScreen } from '../../features/language/LanguageScreen'
 import { GameModeScreen } from '../../features/gameMode/GameModeScreen'
+import { CrewSizeScreen } from '../../features/crewSize/CrewSizeScreen'
 import { PlayerNameScreen } from '../../features/playerName/PlayerNameScreen'
 import { PaymentScreen } from '../../features/payment/PaymentScreen'
 import { CountdownScreen } from '../../features/strawCountdown/CountdownScreen'
 import { BlowScreen } from '../../features/blow/BlowScreen'
 import { ProcessingScreen } from '../../features/processing/ProcessingScreen'
 import { ResultScreen } from '../../features/result/ResultScreen'
+import { RankingProcessingScreen } from '../../features/rankingProcessing/RankingProcessingScreen'
+import { RankingScreen } from '../../features/ranking/RankingScreen'
 import { FinalScreen } from '../../features/final/FinalScreen'
 
 const routes: RouteObject[] = [
@@ -27,6 +30,10 @@ const routes: RouteObject[] = [
       {
         path: '/mode',
         element: React.createElement(GameModeScreen),
+      },
+      {
+        path: '/crew-size',
+        element: React.createElement(CrewSizeScreen),
       },
       {
         path: '/name',
@@ -51,6 +58,14 @@ const routes: RouteObject[] = [
       {
         path: '/result',
         element: React.createElement(ResultScreen),
+      },
+      {
+        path: '/ranking-processing',
+        element: React.createElement(RankingProcessingScreen),
+      },
+      {
+        path: '/ranking',
+        element: React.createElement(RankingScreen),
       },
       {
         path: '/final',

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useCopy } from '../../content/useCopy'
 import styles from './BackButton.module.css'
 
 interface BackButtonProps {
@@ -12,6 +13,7 @@ interface BackButtonProps {
  */
 export function BackButton({ to }: BackButtonProps) {
   const navigate = useNavigate()
+  const copy = useCopy()
 
   const handleBack = () => {
     if (to) {
@@ -23,7 +25,7 @@ export function BackButton({ to }: BackButtonProps) {
 
   return (
     <button className={styles.backButton} onClick={handleBack}>
-      ← Back
+      ← {copy.common.back}
     </button>
   )
 }

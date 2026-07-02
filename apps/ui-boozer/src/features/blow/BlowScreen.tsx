@@ -5,11 +5,19 @@ import { ProgressBar } from '../../components/ui/ProgressBar'
 import { useRouteGuard } from '../../hooks/useRouteGuard'
 import { useSessionStore } from '../../store/sessionStore'
 import { hardwareService } from '../../services/hardware'
+import { interpolate, useCopy } from '../../content/useCopy'
 import styles from './BlowScreen.module.css'
 
 export function BlowScreen() {
   const navigate = useNavigate()
-  const { setResult } = useSessionStore()
+  const {
+    advanceToNextPlayer,
+    currentPlayerIndex,
+    playerCount,
+    playerName,
+    setResult,
+  } = useSessionStore()
+  const copy = useCopy()
   const [progress, setProgress] = useState(0)
 
   useRouteGuard({
@@ -39,7 +47,18 @@ export function BlowScreen() {
         if (isActive && result.isValid) {
           setResult(result.bac)
           navigationTimer = setTimeout(() => {
-            navigate('/processing')
+            if (playerCount === 1) {
+              navigate('/processing')
+              return
+            }
+
+            if (currentPlayerIndex < playerCount - 1) {
+              advanceToNextPlayer()
+              navigate('/name')
+              return
+            }
+
+            navigate('/ranking-processing')
           }, 300)
         }
       } finally {
@@ -56,7 +75,13 @@ export function BlowScreen() {
       }
       void hardwareService.breathalyzer.stopBreathTest()
     }
-  }, [navigate, setResult])
+  }, [
+    advanceToNextPlayer,
+    currentPlayerIndex,
+    navigate,
+    playerCount,
+    setResult,
+  ])
 
   const progressPercent = Math.round(progress)
   const secondsLeft = Math.max(0, Math.ceil((100 - progressPercent) / 34))
@@ -68,7 +93,13 @@ export function BlowScreen() {
   return (
     <ScreenShell>
       <div className={styles.blowContainer}>
-        <p className={styles.instruction}>¡SOPLA FUERTE!</p>
+        <p className={styles.instruction}>
+          {playerCount > 1
+            ? interpolate(copy.blow.groupInstructionTemplate, {
+                name: playerName,
+              })
+            : copy.blow.singleInstruction}
+        </p>
         <div className={styles.visualizer}>
           <div className={styles.breathIcon}>🌬️</div>
           <div className={styles.bars}>
@@ -93,7 +124,7 @@ export function BlowScreen() {
 
         <p className={styles.progressText}>{secondsLeft}s</p>
         <p className={styles.statusLabel}>
-          {progress < 100 ? 'NO PARES' : 'COMPLETO'}
+          {progress < 100 ? copy.blow.keepGoing : copy.blow.complete}
         </p>
       </div>
     </ScreenShell>

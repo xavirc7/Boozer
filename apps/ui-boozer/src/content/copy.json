@@ -1,0 +1,186 @@
+{
+  "es": {
+    "common": {
+      "back": "Atrás",
+      "continue": "Continuar",
+      "finish": "Fin",
+      "unit": "g/l"
+    },
+    "attract": {
+      "overline": "Welcome to",
+      "titleLines": ["BOOZER", "TEST DE", "BORRACHERA"],
+      "touchHint": "Toca la pantalla",
+      "startButton": "Iniciar test"
+    },
+    "language": {
+      "title": "Idioma / Language",
+      "spanish": "Español",
+      "english": "English",
+      "continueButton": "Continuar"
+    },
+    "gameMode": {
+      "title": "¿Cómo juegas?",
+      "solo": "Yo solo",
+      "group": "Con mi crew",
+      "continueButton": "Seguir"
+    },
+    "crewSize": {
+      "title": "¿Cuántos sopláis?",
+      "personLabel": "Personas",
+      "totalTemplate": "TOTAL: {{total}}€",
+      "paymentButton": "Ir a pago"
+    },
+    "payment": {
+      "title": "Paga y sopla",
+      "instructionTitle": "Acerca tu tarjeta",
+      "instructionText": "Pago seguro y rápido",
+      "processing": "Procesando...",
+      "retryButton": "Reintentar pago",
+      "failed": "Pago fallido. Inténtalo de nuevo.",
+      "error": "Error de pago. Inténtalo de nuevo."
+    },
+    "playerName": {
+      "title": "¿Cómo te llamamos?",
+      "subtitleTemplate": "Jugador {{current}}/{{total}}",
+      "placeholder": "Tu nombre...",
+      "suggestionLabel": "O elige uno:",
+      "anonymous": "Anónimo",
+      "goButton": "Vamos",
+      "defaultNameTemplate": "Player {{number}}",
+      "nicknames": ["PARTY KING", "DJ SHOTS", "LOCA", "EL JEFE", "FIESTA", "TEQUILA"]
+    },
+    "countdown": {
+      "singleLabel": "Coge la pajita",
+      "playerTemplate": "{{name}} · {{current}}/{{total}}",
+      "ready": "¡Ya!"
+    },
+    "blow": {
+      "singleInstruction": "¡Sopla fuerte!",
+      "groupInstructionTemplate": "{{name}}, sopla fuerte",
+      "keepGoing": "No pares",
+      "complete": "Completo"
+    },
+    "processing": {
+      "label": "Analizando...",
+      "analyzeText": "Calculando tu nivel"
+    },
+    "result": {
+      "titles": {
+        "SAFE": "Todo OK",
+        "WARNING": "Ojito",
+        "STOP": "Muy borracho"
+      },
+      "messages": {
+        "SAFE": "Por debajo del límite. Mantén la cabeza fría.",
+        "WARNING": "Te acercas al límite. Mejor moverse con cuidado.",
+        "STOP": "Ni se te ocurra conducir. Busca una vuelta segura."
+      },
+      "finishButton": "Fin"
+    },
+    "rankingProcessing": {
+      "label": "Calculando ranking...",
+      "analyzeText": "Ordenando resultados"
+    },
+    "ranking": {
+      "title": "Ranking crew",
+      "finishButton": "Fin"
+    },
+    "final": {
+      "message": "Gracias por jugar",
+      "subMessage": "Disfruta la noche. No conduzcas si has bebido.",
+      "restartButton": "Volver al inicio"
+    }
+  },
+  "en": {
+    "common": {
+      "back": "Back",
+      "continue": "Continue",
+      "finish": "Finish",
+      "unit": "g/l"
+    },
+    "attract": {
+      "overline": "Welcome to",
+      "titleLines": ["BOOZER", "DRUNKNESS", "TEST"],
+      "touchHint": "Tap the screen",
+      "startButton": "Start test"
+    },
+    "language": {
+      "title": "Language / Idioma",
+      "spanish": "Español",
+      "english": "English",
+      "continueButton": "Continue"
+    },
+    "gameMode": {
+      "title": "How are you playing?",
+      "solo": "Just me",
+      "group": "With my crew",
+      "continueButton": "Next"
+    },
+    "crewSize": {
+      "title": "How many are blowing?",
+      "personLabel": "People",
+      "totalTemplate": "TOTAL: {{total}}€",
+      "paymentButton": "Go to payment"
+    },
+    "payment": {
+      "title": "Pay and blow",
+      "instructionTitle": "Tap your card",
+      "instructionText": "Fast secure payment",
+      "processing": "Processing...",
+      "retryButton": "Retry payment",
+      "failed": "Payment failed. Please try again.",
+      "error": "Payment error. Please try again."
+    },
+    "playerName": {
+      "title": "What should we call you?",
+      "subtitleTemplate": "Player {{current}}/{{total}}",
+      "placeholder": "Your name...",
+      "suggestionLabel": "Or pick one:",
+      "anonymous": "Anonymous",
+      "goButton": "Let's go",
+      "defaultNameTemplate": "Player {{number}}",
+      "nicknames": ["PARTY KING", "DJ SHOTS", "WILD ONE", "THE BOSS", "FIESTA", "TEQUILA"]
+    },
+    "countdown": {
+      "singleLabel": "Grab the straw",
+      "playerTemplate": "{{name}} · {{current}}/{{total}}",
+      "ready": "Go!"
+    },
+    "blow": {
+      "singleInstruction": "Blow hard!",
+      "groupInstructionTemplate": "{{name}}, blow hard",
+      "keepGoing": "Keep going",
+      "complete": "Complete"
+    },
+    "processing": {
+      "label": "Analyzing...",
+      "analyzeText": "Calculating your level"
+    },
+    "result": {
+      "titles": {
+        "SAFE": "All good",
+        "WARNING": "Careful",
+        "STOP": "Too drunk"
+      },
+      "messages": {
+        "SAFE": "Below the limit. Keep it smart.",
+        "WARNING": "You are getting close to the limit. Move carefully.",
+        "STOP": "Do not drive. Find a safe way home."
+      },
+      "finishButton": "Finish"
+    },
+    "rankingProcessing": {
+      "label": "Calculating ranking...",
+      "analyzeText": "Sorting results"
+    },
+    "ranking": {
+      "title": "Crew ranking",
+      "finishButton": "Finish"
+    },
+    "final": {
+      "message": "Thanks for playing",
+      "subMessage": "Enjoy the night. Do not drive if you have been drinking.",
+      "restartButton": "Back to start"
+    }
+  }
+}

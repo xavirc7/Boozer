@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { ScreenShell } from '../../components/layout/ScreenShell'
 import { NeonButton } from '../../components/ui/NeonButton'
+import { useCopy } from '../../content/useCopy'
 import styles from './AttractScreen.module.css'
 
 export function AttractScreen() {
   const navigate = useNavigate()
+  const copy = useCopy()
 
   return (
     <ScreenShell
@@ -15,20 +17,20 @@ export function AttractScreen() {
             className={styles.startButton}
             onClick={() => navigate('/language')}
           >
-            INICIAR TEST
+            {copy.attract.startButton}
           </NeonButton>
         </div>
       }
     >
       <div className={styles.heroSection}>
-        <p className={styles.titleOverline}>Welcome to</p>
+        <p className={styles.titleOverline}>{copy.attract.overline}</p>
         <h1 className={styles.mainTitle}>
-          <span>BOOZER</span>
-          <span>TEST DE</span>
-          <span>BORRACHERA</span>
+          {copy.attract.titleLines.map((line) => (
+            <span key={line}>{line}</span>
+          ))}
         </h1>
         <div className={styles.iconWrapper}>🍾</div>
-        <p className={styles.subtitle}>TOCA LA PANTALLA</p>
+        <p className={styles.subtitle}>{copy.attract.touchHint}</p>
       </div>
     </ScreenShell>
   )

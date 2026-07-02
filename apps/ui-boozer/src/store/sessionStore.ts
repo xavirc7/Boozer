@@ -2,10 +2,21 @@ import { create } from 'zustand'
 
 type Language = 'es' | 'en' | null
 type GameMode = 'solo' | 'group' | null
+export type PlayerCount = 1 | 2 | 3 | 4 | 5
+
+export interface SessionPlayer {
+  id: number
+  name: string
+  result: number | null
+  resultLabel: string | null
+}
 
 interface SessionState {
   language: Language
   gameMode: GameMode
+  playerCount: PlayerCount
+  currentPlayerIndex: number
+  players: SessionPlayer[]
   playerName: string
   paymentCompleted: boolean
   result: number | null
@@ -15,6 +26,8 @@ interface SessionState {
 interface SessionActions {
   setLanguage: (language: Language) => void
   setGameMode: (mode: GameMode) => void
+  setPlayerCount: (count: PlayerCount) => void
+  advanceToNextPlayer: () => void
   setPlayerName: (name: string) => void
   setPaymentCompleted: (value: boolean) => void
   setResult: (value: number | null) => void
@@ -24,9 +37,20 @@ interface SessionActions {
 
 type SessionStore = SessionState & SessionActions
 
+const createPlayers = (count: PlayerCount): SessionPlayer[] =>
+  Array.from({ length: count }, (_, index) => ({
+    id: index + 1,
+    name: '',
+    result: null,
+    resultLabel: null,
+  }))
+
 const initialState: SessionState = {
   language: null,
   gameMode: null,
+  playerCount: 1,
+  currentPlayerIndex: 0,
+  players: createPlayers(1),
   playerName: '',
   paymentCompleted: false,
   result: null,
@@ -36,10 +60,71 @@ const initialState: SessionState = {
 export const useSessionStore = create<SessionStore>((set) => ({
   ...initialState,
   setLanguage: (language) => set({ language }),
-  setGameMode: (mode) => set({ gameMode: mode }),
-  setPlayerName: (name) => set({ playerName: name }),
+  setGameMode: (mode) =>
+    set((state) => {
+      const playerCount = mode === 'solo' ? 1 : state.playerCount
+
+      return {
+        gameMode: mode,
+        playerCount,
+        currentPlayerIndex: 0,
+        players: createPlayers(playerCount),
+        playerName: '',
+        paymentCompleted: false,
+        result: null,
+        resultLabel: null,
+      }
+    }),
+  setPlayerCount: (count) =>
+    set({
+      playerCount: count,
+      currentPlayerIndex: 0,
+      players: createPlayers(count),
+      playerName: '',
+      paymentCompleted: false,
+      result: null,
+      resultLabel: null,
+    }),
+  advanceToNextPlayer: () =>
+    set((state) => {
+      const nextIndex = Math.min(
+        state.currentPlayerIndex + 1,
+        state.playerCount - 1
+      )
+      const nextPlayer = state.players[nextIndex]
+
+      return {
+        currentPlayerIndex: nextIndex,
+        playerName: nextPlayer?.name ?? '',
+        result: nextPlayer?.result ?? null,
+        resultLabel: nextPlayer?.resultLabel ?? null,
+      }
+    }),
+  setPlayerName: (name) =>
+    set((state) => ({
+      playerName: name,
+      players: state.players.map((player, index) =>
+        index === state.currentPlayerIndex ? { ...player, name } : player
+      ),
+    })),
   setPaymentCompleted: (value) => set({ paymentCompleted: value }),
-  setResult: (value) => set({ result: value }),
-  setResultLabel: (label) => set({ resultLabel: label }),
+  setResult: (value) =>
+    set((state) => ({
+      result: value,
+      players: state.players.map((player, index) =>
+        index === state.currentPlayerIndex
+          ? { ...player, result: value }
+          : player
+      ),
+    })),
+  setResultLabel: (label) =>
+    set((state) => ({
+      resultLabel: label,
+      players: state.players.map((player, index) =>
+        index === state.currentPlayerIndex
+          ? { ...player, resultLabel: label }
+          : player
+      ),
+    })),
   resetSession: () => set(initialState),
 }))

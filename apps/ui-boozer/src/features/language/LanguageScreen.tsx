@@ -5,11 +5,13 @@ import { AnimatedNeonCard } from '../../components/ui/AnimatedNeonCard'
 import { AnimatedNeonButton } from '../../components/ui/AnimatedNeonButton'
 import { useSessionStore } from '../../store/sessionStore'
 import { ScreenWrapper } from '../../components/wrappers/ScreenWrapper'
+import { useCopy } from '../../content/useCopy'
 import styles from './LanguageScreen.module.css'
 
 export function LanguageScreen() {
   const navigate = useNavigate()
   const { setLanguage } = useSessionStore()
+  const copy = useCopy()
   const [selectedLang, setSelectedLang] = useState<'es' | 'en' | null>(null)
 
   const handleContinue = () => {
@@ -21,10 +23,10 @@ export function LanguageScreen() {
 
   return (
     <ScreenWrapper>
-      <ScreenShell title="IDIOMA / LANGUAGE">
+      <ScreenShell title={copy.language.title}>
         <div className={styles.cardGrid}>
           <AnimatedNeonCard
-            title="ESPAÑOL"
+            title={copy.language.spanish}
             selected={selectedLang === 'es'}
             onClick={() => setSelectedLang('es')}
           >
@@ -32,7 +34,7 @@ export function LanguageScreen() {
           </AnimatedNeonCard>
 
           <AnimatedNeonCard
-            title="ENGLISH"
+            title={copy.language.english}
             selected={selectedLang === 'en'}
             onClick={() => setSelectedLang('en')}
           >
@@ -48,7 +50,7 @@ export function LanguageScreen() {
               fullWidth
               onClick={handleContinue}
             >
-              CONTINUAR
+              {copy.language.continueButton}
             </AnimatedNeonButton>
           </div>
         )}

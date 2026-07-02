@@ -7,11 +7,13 @@ import { BackButton } from '../../components/ui/BackButton'
 import { ScreenWrapper } from '../../components/wrappers/ScreenWrapper'
 import { useSessionStore } from '../../store/sessionStore'
 import { useRouteGuard } from '../../hooks/useRouteGuard'
+import { useCopy } from '../../content/useCopy'
 import styles from './GameModeScreen.module.css'
 
 export function GameModeScreen() {
   const navigate = useNavigate()
-  const { setGameMode } = useSessionStore()
+  const { setGameMode, setPlayerCount } = useSessionStore()
+  const copy = useCopy()
   const [selectedMode, setSelectedMode] = useState<'solo' | 'group' | null>(null)
 
   // Protect this route - language must be selected
@@ -24,7 +26,13 @@ export function GameModeScreen() {
   const handleContinue = () => {
     if (selectedMode) {
       setGameMode(selectedMode)
-      navigate('/name')
+      if (selectedMode === 'solo') {
+        setPlayerCount(1)
+        navigate('/payment')
+        return
+      }
+
+      navigate('/crew-size')
     }
   }
 
@@ -32,10 +40,10 @@ export function GameModeScreen() {
     <>
       <BackButton to="/language" />
       <ScreenWrapper>
-        <ScreenShell title="¿CÓMO JUEGAS?">
+        <ScreenShell title={copy.gameMode.title}>
           <div className={styles.cardGrid}>
             <AnimatedNeonCard
-              title="YO SOLO"
+              title={copy.gameMode.solo}
               selected={selectedMode === 'solo'}
               onClick={() => setSelectedMode('solo')}
               accent="cyan"
@@ -44,7 +52,7 @@ export function GameModeScreen() {
             </AnimatedNeonCard>
 
             <AnimatedNeonCard
-              title="CON MI CREW"
+              title={copy.gameMode.group}
               selected={selectedMode === 'group'}
               onClick={() => setSelectedMode('group')}
               accent="magenta"
@@ -61,7 +69,7 @@ export function GameModeScreen() {
                 fullWidth
                 onClick={handleContinue}
               >
-                SEGUIR
+                {copy.gameMode.continueButton}
               </AnimatedNeonButton>
             </div>
           )}
