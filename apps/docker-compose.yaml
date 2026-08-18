@@ -1,0 +1,39 @@
+services:
+  backend:
+    build:
+      context: ./api-boozer
+      dockerfile: Dockerfile
+    container_name: app_backend
+    restart: unless-stopped
+    environment:
+      - PORT=8000
+      - ENVIRONMENT=production
+    # No exponemos el puerto 8000 al exterior: solo accesible internamente por Nginx
+    expose:
+      - "8000"
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./ui-boozer
+      dockerfile: Dockerfile
+    container_name: app_frontend
+    restart: unless-stopped
+    ports:
+      # Único puerto expuesto hacia tu red local o internet
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
