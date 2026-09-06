@@ -47,7 +47,14 @@
       "anonymous": "Anónimo",
       "goButton": "Vamos",
       "defaultNameTemplate": "Player {{number}}",
-      "nicknames": ["PARTY KING", "DJ SHOTS", "LOCA", "EL JEFE", "FIESTA", "TEQUILA"]
+      "nicknames": [
+        "PARTY KING",
+        "DJ SHOTS",
+        "LOCA",
+        "EL JEFE",
+        "FIESTA",
+        "TEQUILA"
+      ]
     },
     "countdown": {
       "singleLabel": "Coge la pajita",
@@ -139,7 +146,14 @@
       "anonymous": "Anonymous",
       "goButton": "Let's go",
       "defaultNameTemplate": "Player {{number}}",
-      "nicknames": ["PARTY KING", "DJ SHOTS", "WILD ONE", "THE BOSS", "FIESTA", "TEQUILA"]
+      "nicknames": [
+        "PARTY KING",
+        "DJ SHOTS",
+        "WILD ONE",
+        "THE BOSS",
+        "FIESTA",
+        "TEQUILA"
+      ]
     },
     "countdown": {
       "singleLabel": "Grab the straw",

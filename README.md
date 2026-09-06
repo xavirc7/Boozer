@@ -30,6 +30,43 @@ Boozer
 
 ---
 
+## 🐳 Docker: desarrollo del frontend
+
+Con Docker Desktop abierto, ejecuta desde `apps/`:
+
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build -d frontend
+```
+
+Abre http://localhost. Este modo ejecuta Vite y monta el código local: al guardar
+cambios en React, CSS o `src/content/copy.json`, el navegador se actualiza
+automáticamente. Si ya tenías la versión compilada abierta, recarga la página una
+vez tras cambiar a desarrollo. La primera instalación de dependencias puede tardar.
+El backend conserva su configuración; `/api/`, `/docs` y `/openapi.json` se envían
+a FastAPI. Esto no sustituye los servicios simulados por integraciones reales.
+
+```bash
+# Ver el arranque y las actualizaciones de Vite (Ctrl+C sale del visor)
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml logs -f frontend
+
+# Tras cambiar package.json o package-lock.json, reinstalar y reiniciar Vite
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml restart frontend
+
+# Detener solo el frontend
+docker compose -f docker-compose.yaml -f docker-compose.dev.yaml stop frontend
+
+# Volver al frontend compilado, servido por Nginx
+docker compose -f docker-compose.yaml up --build -d --no-deps frontend
+```
+
+Usa ambos archivos Compose para trabajar en desarrollo. Las dependencias Linux se
+guardan en un volumen separado de las instaladas en tu Mac. El modo base con un
+solo archivo sirve una compilación fija y necesita reconstruirse para mostrar cambios.
+El backend no tiene recarga automática ni volumen persistente para SQLite en esta
+configuración; evita eliminarlo o recrearlo si necesitas conservar sus datos.
+
+---
+
 ## 🎨 Frontend (apps/ui-boozer)
 
 1. Change into the directory:
