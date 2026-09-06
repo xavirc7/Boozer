@@ -106,3 +106,15 @@ del dispositivo real.
 Desde `apps/ui-boozer`, `npm test` comprueba los servicios y `npm run build` compila
 el frontend. Los adapters antiguos de `services/hardware` han sido sustituidos por
 esta interfaz común, sin eventos de progreso ni consultas de sesión.
+
+## Pantallas tras un pago no completado
+
+- Rechazado: se muestra el aviso durante 7 segundos y se vuelve a `/`, limpiando la partida.
+- Cancelado por tiempo: se muestra una pantalla de 10 segundos con «Realizar pago».
+  Pulsarlo antes del límite inicia un intento nuevo, manteniendo idioma, modo y jugadores.
+  Si no se pulsa, se vuelve a `/` y se limpia la partida.
+- Cancelación manual: sigue el recorrido de Atrás, sin mostrar el aviso de timeout.
+- Error de transporte: no se trata como rechazo ni timeout confirmado.
+
+La cuenta atrás empieza al recibir la respuesta final de la API. El timer anterior
+se desactiva al reintentar y al desmontar la pantalla.

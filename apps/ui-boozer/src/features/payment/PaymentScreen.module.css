@@ -172,3 +172,79 @@
     min-height: 54px;
   }
 }
+
+/* Payment outcomes share the payment card proportions and typography. */
+.outcomeContainer {
+  gap: 1.25rem;
+  text-align: center;
+}
+
+.outcomeIcon {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  color: #ff6969;
+  background: rgba(255, 49, 49, 0.1);
+}
+
+.outcomeIcon svg {
+  width: 52px;
+  height: 52px;
+}
+
+.outcomeCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  border-color: rgba(255, 72, 72, 0.8);
+  background: linear-gradient(180deg, rgba(255, 49, 49, 0.08), transparent), rgba(7, 12, 21, 0.95);
+  box-shadow: inset 0 0 0 1px rgba(255, 49, 49, 0.08), 0 0 26px rgba(255, 49, 49, 0.14);
+}
+
+.outcomeTitle {
+  color: #ff6969;
+}
+
+.outcomeMessage {
+  margin: 0;
+  color: #f2dede;
+  font-family: var(--font-family-display);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.6;
+}
+
+.countdownNumber {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-weight: var(--font-weight-black);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: #ff6969;
+  text-shadow: 0 0 24px rgba(255, 49, 49, 0.22);
+}
+
+.outcomeTimer {
+  color: #dcbaba;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+}
+
+.outcomeRetryButton {
+  border: 1px solid #ff9292;
+  background: linear-gradient(180deg, #ff8282 0%, #ff6969 100%);
+  color: #210909;
+  box-shadow: 0 0 18px rgba(255, 49, 49, 0.14);
+}
+
+.outcomeRetryButton:hover {
+  background: #ff9292;
+}
+
+.outcomeRetryButton:focus-visible {
+  outline: 3px solid var(--color-text-primary);
+  outline-offset: 5px;
+}

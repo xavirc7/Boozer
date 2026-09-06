@@ -9,10 +9,11 @@ import { apiServices } from '../../services/api'
 import type { PaymentResponse } from '../../services/api'
 import { useCopy } from '../../content/useCopy'
 import styles from './PaymentScreen.module.css'
+import { PaymentOutcomeScreen } from './PaymentOutcomeScreen'
 
 const PRICE_PER_PLAYER = 1
 
-type Phase = 'waiting' | 'processing' | 'cancelling' | 'rejected' | 'cancelled' | 'error'
+type Phase = 'waiting' | 'processing' | 'cancelling' | 'rejected' | 'cancelled' | 'timed_out' | 'error'
 
 export function PaymentScreen() {
   const navigate = useNavigate()
@@ -76,7 +77,7 @@ export function PaymentScreen() {
         allowExit.current = true
         setPaymentInFlight(false)
         setPaymentId(null)
-        setPhase(result.status)
+        setPhase(result.status === 'cancelled' && result.reason === 'timeout' ? 'timed_out' : result.status)
       }
     }).catch(() => {
       if (active && !finished.current && !cancelling.current) setPhase('error')
@@ -94,7 +95,14 @@ export function PaymentScreen() {
       if (finished.current) return
       if (result.status === 'accepted') {
         acceptRef.current()
-      } else if (result.status === 'cancelled' || result.status === 'rejected') {
+      } else if (result.status === 'rejected' || (result.status === 'cancelled' && result.reason === 'timeout')) {
+        // A final response can race with the user's Back action; still show its outcome.
+        allowExit.current = true
+        setPaymentInFlight(false)
+        setPaymentId(null)
+        blocker.reset()
+        setPhase(result.status === 'rejected' ? 'rejected' : 'timed_out')
+      } else if (result.status === 'cancelled') {
         finished.current = true
         allowExit.current = true
         setPaymentInFlight(false)
@@ -115,7 +123,7 @@ export function PaymentScreen() {
   }, [blocker, attemptId, setPaymentId, setPaymentInFlight])
 
   const handleRetry = () => {
-    if (isProcessing) return
+    if (isProcessing || phase === 'rejected') return
     allowExit.current = false
     setPhase('waiting')
     if (phase === 'error') {
@@ -124,6 +132,19 @@ export function PaymentScreen() {
     } else {
       setAttemptId(crypto.randomUUID())
     }
+  }
+
+  const returnToStart = () => {
+    if (finished.current) return
+    finished.current = true
+    allowExit.current = true
+    if (blockerRef.current.state === 'blocked') blockerRef.current.reset()
+    navigate('/', { replace: true })
+    useSessionStore.getState().resetSession()
+  }
+
+  if (phase === 'rejected' || phase === 'timed_out') {
+    return <PaymentOutcomeScreen kind={phase} onReturnToStart={returnToStart} onRetry={handleRetry} />
   }
 
   return (
