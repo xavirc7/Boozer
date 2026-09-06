@@ -34,7 +34,12 @@
       "title": "Paga y sopla",
       "instructionTitle": "Acerca tu tarjeta",
       "instructionText": "Pago seguro y rápido",
-      "processing": "Procesando...",
+      "processing": "Esperando el pago...",
+      "cancelling": "Cancelando pago…",
+      "cannotCancel": "Tarjeta detectada. Esperando el resultado del pago…",
+      "cancelled": "Pago cancelado. Puedes volver a intentarlo.",
+      "unknown": "No se ha podido confirmar el estado del pago. Compruébalo antes de continuar.",
+      "checkButton": "Comprobar pago",
       "retryButton": "Reintentar pago",
       "failed": "Pago fallido. Inténtalo de nuevo.",
       "error": "Error de pago. Inténtalo de nuevo."
@@ -65,6 +70,9 @@
       "singleInstruction": "¡Sopla fuerte!",
       "groupInstructionTemplate": "{{name}}, sopla fuerte",
       "keepGoing": "No pares",
+      "waiting": "Esperando la lectura…",
+      "error": "No se ha podido recibir la lectura.",
+      "retryButton": "Recuperar lectura",
       "complete": "Completo"
     },
     "processing": {
@@ -133,7 +141,12 @@
       "title": "Pay and blow",
       "instructionTitle": "Tap your card",
       "instructionText": "Fast secure payment",
-      "processing": "Processing...",
+      "processing": "Waiting for payment...",
+      "cancelling": "Cancelling payment…",
+      "cannotCancel": "Card detected. Waiting for the payment result…",
+      "cancelled": "Payment cancelled. You can try again.",
+      "unknown": "Could not confirm the payment status. Check it before continuing.",
+      "checkButton": "Check payment",
       "retryButton": "Retry payment",
       "failed": "Payment failed. Please try again.",
       "error": "Payment error. Please try again."
@@ -164,6 +177,9 @@
       "singleInstruction": "Blow hard!",
       "groupInstructionTemplate": "{{name}}, blow hard",
       "keepGoing": "Keep going",
+      "waiting": "Waiting for the reading…",
+      "error": "Could not receive the reading.",
+      "retryButton": "Retrieve reading",
       "complete": "Complete"
     },
     "processing": {

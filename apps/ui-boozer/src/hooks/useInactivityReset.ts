@@ -8,7 +8,7 @@ import { useSessionStore } from '../store/sessionStore'
  */
 export function useInactivityReset(timeoutMs: number = 120000) {
   const navigate = useNavigate()
-  const { resetSession } = useSessionStore()
+  const { resetSession, paymentInFlight } = useSessionStore()
   const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const resetInactivityTimer = () => {
@@ -19,6 +19,8 @@ export function useInactivityReset(timeoutMs: number = 120000) {
 
     // Set new timer
     timeoutIdRef.current = setTimeout(() => {
+      // An unresolved charge must be resolved by the payment screen first.
+      if (useSessionStore.getState().paymentInFlight) return
       // Reset session and navigate to attract screen
       resetSession()
       navigate('/')
@@ -49,5 +51,5 @@ export function useInactivityReset(timeoutMs: number = 120000) {
         window.removeEventListener(event, handleActivity)
       })
     }
-  }, [navigate, resetSession, timeoutMs])
+  }, [navigate, resetSession, timeoutMs, paymentInFlight])
 }

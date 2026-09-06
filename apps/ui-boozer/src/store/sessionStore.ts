@@ -18,6 +18,8 @@ interface SessionState {
   currentPlayerIndex: number
   players: SessionPlayer[]
   playerName: string
+  paymentId: string | null
+  paymentInFlight: boolean
   paymentCompleted: boolean
   result: number | null
   resultLabel: string | null
@@ -29,6 +31,8 @@ interface SessionActions {
   setPlayerCount: (count: PlayerCount) => void
   advanceToNextPlayer: () => void
   setPlayerName: (name: string) => void
+  setPaymentId: (id: string | null) => void
+  setPaymentInFlight: (value: boolean) => void
   setPaymentCompleted: (value: boolean) => void
   setResult: (value: number | null) => void
   setResultLabel: (label: string | null) => void
@@ -52,6 +56,8 @@ const initialState: SessionState = {
   currentPlayerIndex: 0,
   players: createPlayers(1),
   playerName: '',
+  paymentId: null,
+  paymentInFlight: false,
   paymentCompleted: false,
   result: null,
   resultLabel: null,
@@ -70,6 +76,8 @@ export const useSessionStore = create<SessionStore>((set) => ({
         currentPlayerIndex: 0,
         players: createPlayers(playerCount),
         playerName: '',
+        paymentId: null,
+        paymentInFlight: false,
         paymentCompleted: false,
         result: null,
         resultLabel: null,
@@ -81,6 +89,8 @@ export const useSessionStore = create<SessionStore>((set) => ({
       currentPlayerIndex: 0,
       players: createPlayers(count),
       playerName: '',
+      paymentId: null,
+      paymentInFlight: false,
       paymentCompleted: false,
       result: null,
       resultLabel: null,
@@ -107,6 +117,8 @@ export const useSessionStore = create<SessionStore>((set) => ({
         index === state.currentPlayerIndex ? { ...player, name } : player
       ),
     })),
+  setPaymentId: (paymentId) => set({ paymentId }),
+  setPaymentInFlight: (paymentInFlight) => set({ paymentInFlight }),
   setPaymentCompleted: (value) => set({ paymentCompleted: value }),
   setResult: (value) =>
     set((state) => ({

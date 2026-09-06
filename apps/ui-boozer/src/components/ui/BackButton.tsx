@@ -5,13 +5,14 @@ import styles from './BackButton.module.css'
 
 interface BackButtonProps {
   to?: string
+  disabled?: boolean
 }
 
 /**
  * Back button component for kiosk navigation.
  * If no 'to' route is specified, it navigates back in history.
  */
-export function BackButton({ to }: BackButtonProps) {
+export function BackButton({ to, disabled = false }: BackButtonProps) {
   const navigate = useNavigate()
   const copy = useCopy()
 
@@ -24,7 +25,7 @@ export function BackButton({ to }: BackButtonProps) {
   }
 
   return (
-    <button className={styles.backButton} onClick={handleBack}>
+    <button className={styles.backButton} onClick={handleBack} disabled={disabled}>
       ← {copy.common.back}
     </button>
   )

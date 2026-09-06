@@ -1,174 +1,46 @@
-import { ApiClient, ApiResponse } from './client';
+import type { ApiClient } from './client'
 
-/**
- * Payment types
- */
-export interface PaymentMethod {
-  id: string;
-  type: 'credit_card' | 'debit_card' | 'digital_wallet';
-  last4?: string;
-  expiryMonth?: number;
-  expiryYear?: number;
+export type PaymentStatus = 'processing' | 'accepted' | 'rejected' | 'cancelled'
+
+export interface StartPaymentRequest {
+  transaction_id: string
+  amount: number
+  player_count: number
 }
 
-export interface CreatePaymentRequest {
-  sessionId: string;
-  amount: number;
-  currency: string;
-  description?: string;
-  paymentMethod?: PaymentMethod;
+export interface PaymentResponse {
+  transaction_id: string
+  status: PaymentStatus
+  reason?: 'timeout' | 'user_cancelled'
 }
 
-export interface CreatePaymentResponse {
-  paymentId: string;
-  sessionId: string;
-  amount: number;
-  currency: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  clientSecret?: string; // For payment processing
-  createdAt: string;
-}
-
-export interface ConfirmPaymentRequest {
-  paymentId: string;
-  paymentMethod: PaymentMethod;
-  billingDetails?: {
-    name?: string;
-    email?: string;
-    phone?: string;
-  };
-}
-
-export interface ConfirmPaymentResponse {
-  paymentId: string;
-  status: 'completed' | 'failed' | 'pending';
-  transactionId?: string;
-  errorMessage?: string;
-  completedAt?: string;
-}
-
-/**
- * Payment API Service
- * Handles all payment-related API operations
- */
-class PaymentApiService {
+export class PaymentApiService {
+  private pending = new Map<string, Promise<PaymentResponse>>()
   constructor(private client: ApiClient) {}
 
-  /**
-   * Create a new payment
-   */
-  async createPayment(request: CreatePaymentRequest): Promise<ApiResponse<CreatePaymentResponse>> {
-    // TODO: Replace with real API call once backend is ready
-    // return this.client.post<CreatePaymentResponse>('/payments', request);
-
-    // Mock implementation with simulated latency
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          data: {
-            paymentId: `pay-${Date.now()}`,
-            sessionId: request.sessionId,
-            amount: request.amount,
-            currency: request.currency,
-            status: 'pending',
-            clientSecret: `client-secret-${Date.now()}`, // For Stripe/payment processor
-            createdAt: new Date().toISOString(),
-          },
-          status: 201,
-          headers: {
-            'content-type': 'application/json',
-          },
-        });
-      }, 400); // Simulate 400ms latency
-    });
+  private validate(response: PaymentResponse, transactionId: string, final: boolean) {
+    const statuses = final ? ['accepted', 'rejected', 'cancelled'] : ['processing', 'accepted', 'rejected', 'cancelled']
+    if (!response || response.transaction_id !== transactionId || !statuses.includes(response.status)) {
+      throw new Error('Unexpected payment response')
+    }
+    return response
   }
 
-  /**
-   * Confirm and process a payment
-   */
-  async confirmPayment(
-    request: ConfirmPaymentRequest
-  ): Promise<ApiResponse<ConfirmPaymentResponse>> {
-    // TODO: Replace with real API call once backend is ready
-    // return this.client.post<ConfirmPaymentResponse>(`/payments/${request.paymentId}/confirm`, request);
-
-    // Mock implementation with simulated latency
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const isSuccessful = Math.random() > 0.1; // 90% success rate for demo
-
-        resolve({
-          data: {
-            paymentId: request.paymentId,
-            status: isSuccessful ? 'completed' : 'failed',
-            transactionId: isSuccessful ? `txn-${Date.now()}` : undefined,
-            errorMessage: isSuccessful ? undefined : 'Card declined',
-            completedAt: isSuccessful ? new Date().toISOString() : undefined,
-          },
-          status: isSuccessful ? 200 : 402, // 402 Payment Required for failed
-          headers: {
-            'content-type': 'application/json',
-          },
-        });
-      }, 800); // Simulate 800ms latency for payment processing
-    });
+  async startPayment(request: StartPaymentRequest): Promise<PaymentResponse> {
+    const existing = this.pending.get(request.transaction_id)
+    if (existing) return existing
+    // Backend owns the 30-second reader timeout; transport timeout is longer.
+    const operation = this.client.post<PaymentResponse>('/payments/initiate', request, { timeout: 60000 })
+      .then(({ data }) => this.validate(data, request.transaction_id, true))
+      .finally(() => { this.pending.delete(request.transaction_id) })
+    this.pending.set(request.transaction_id, operation)
+    return operation
   }
 
-  /**
-   * Get payment details
-   */
-  async getPayment(paymentId: string): Promise<ApiResponse<CreatePaymentResponse>> {
-    // TODO: Replace with real API call once backend is ready
-    // return this.client.get<CreatePaymentResponse>(`/payments/${paymentId}`);
-
-    // Mock implementation
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          data: {
-            paymentId,
-            sessionId: 'session-123',
-            amount: 25.99,
-            currency: 'USD',
-            status: 'completed',
-            createdAt: new Date(Date.now() - 60000).toISOString(),
-          },
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-          },
-        });
-      }, 250);
-    });
-  }
-
-  /**
-   * Cancel a payment
-   */
-  async cancelPayment(paymentId: string): Promise<ApiResponse<{ success: boolean }>> {
-    // TODO: Replace with real API call once backend is ready
-    // return this.client.delete<{ success: boolean }>(`/payments/${paymentId}`);
-
-    // Mock implementation
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          data: { success: true },
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-          },
-        });
-      }, 200);
-    });
+  async cancelPayment(transactionId: string): Promise<PaymentResponse> {
+    const response = await this.client.post<PaymentResponse>(`/payments/${encodeURIComponent(transactionId)}/cancel`)
+    return this.validate(response.data, transactionId, false)
   }
 }
 
-/**
- * Create payment API service instance
- */
-export const createPaymentApi = (client: ApiClient): PaymentApiService => {
-  return new PaymentApiService(client);
-};
-
-export default PaymentApiService;
+export const createPaymentApi = (client: ApiClient) => new PaymentApiService(client)

@@ -1,105 +1,134 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useBeforeUnload, useBlocker, useNavigate } from 'react-router-dom'
 import { ScreenShell } from '../../components/layout/ScreenShell'
 import { BackButton } from '../../components/ui/BackButton'
 import { ScreenWrapper } from '../../components/wrappers/ScreenWrapper'
 import { useSessionStore } from '../../store/sessionStore'
 import { useRouteGuard } from '../../hooks/useRouteGuard'
-import { hardwareService } from '../../services/hardware'
+import { apiServices } from '../../services/api'
+import type { PaymentResponse } from '../../services/api'
 import { useCopy } from '../../content/useCopy'
 import styles from './PaymentScreen.module.css'
 
 const PRICE_PER_PLAYER = 1
-const PRICE_CURRENCY = 'EUR'
+
+type Phase = 'waiting' | 'processing' | 'cancelling' | 'rejected' | 'cancelled' | 'error'
 
 export function PaymentScreen() {
   const navigate = useNavigate()
-  const { gameMode, playerCount, setPaymentCompleted } = useSessionStore()
+  const { language, gameMode, playerCount, setPaymentId, setPaymentInFlight, setPaymentCompleted } = useSessionStore()
   const copy = useCopy()
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
+  const [attemptId, setAttemptId] = useState(() => useSessionStore.getState().paymentId ?? crypto.randomUUID())
+  const [retry, setRetry] = useState(0)
+  const [phase, setPhase] = useState<Phase>('waiting')
+  const allowExit = useRef(false)
+  const cancelling = useRef(false)
+  const finished = useRef(false)
   const totalPrice = PRICE_PER_PLAYER * playerCount
   const backRoute = gameMode === 'group' ? '/crew-size' : '/mode'
+  const isProcessing = phase === 'waiting' || phase === 'processing' || phase === 'cancelling'
+  const error = phase === 'error' ? copy.payment.unknown
+    : phase === 'rejected' ? copy.payment.failed
+    : phase === 'cancelled' ? copy.payment.cancelled : null
 
-  // Protect this route - mode and player count must be selected first
-  useRouteGuard({
-    requiredState: {
-      language: true,
-      gameMode: true,
-    },
+  useRouteGuard({ requiredState: { language: true, gameMode: true } })
+
+  const blocker = useBlocker(({ currentLocation, nextLocation }) =>
+    Boolean(language && gameMode && !allowExit.current && currentLocation.pathname !== nextLocation.pathname)
+  )
+  const blockerRef = useRef(blocker)
+  blockerRef.current = blocker
+
+  useBeforeUnload((event) => {
+    if (useSessionStore.getState().paymentInFlight) {
+      event.preventDefault()
+      event.returnValue = ''
+    }
   })
 
+  const acceptPayment = () => {
+    if (finished.current) return
+    finished.current = true
+    allowExit.current = true
+    setPaymentInFlight(false)
+    setPaymentCompleted(true)
+    if (blockerRef.current.state === 'blocked') blockerRef.current.reset()
+    navigate('/name', { replace: true })
+  }
+  const acceptRef = useRef(acceptPayment)
+  acceptRef.current = acceptPayment
+
   useEffect(() => {
-    let isActive = true
-    let navigationTimer: ReturnType<typeof setTimeout> | null = null
-
-    const processPayment = async () => {
-      setIsProcessing(true)
-      try {
-        const result = await hardwareService.paymentTerminal.startPayment(
-          totalPrice,
-          PRICE_CURRENCY
-        )
-
-        if (!isActive) return
-
-        if (result.success) {
-          setError(null)
-          setPaymentCompleted(true)
-          navigationTimer = setTimeout(() => {
-            navigate('/name')
-          }, 500)
-        } else {
-          setError(copy.payment.failed)
-          setIsProcessing(false)
-        }
-      } catch {
-        if (!isActive) return
-        setError(copy.payment.error)
-        setIsProcessing(false)
+    if (!language || !gameMode) return
+    let active = true
+    setPaymentId(attemptId)
+    setPaymentInFlight(true)
+    setPaymentCompleted(false)
+    apiServices.payment.startPayment({
+      transaction_id: attemptId,
+      amount: totalPrice,
+      player_count: playerCount,
+    }).then((result: PaymentResponse) => {
+      if (!active || finished.current) return
+      if (result.status === 'accepted') {
+        acceptRef.current()
+      } else if (!cancelling.current && (result.status === 'rejected' || result.status === 'cancelled')) {
+        allowExit.current = true
+        setPaymentInFlight(false)
+        setPaymentId(null)
+        setPhase(result.status)
       }
-    }
+    }).catch(() => {
+      if (active && !finished.current && !cancelling.current) setPhase('error')
+      // A transport error does not establish whether the terminal charged the card.
+    })
+    return () => { active = false }
+    // Never cancel in effect cleanup: StrictMode also invokes cleanup during mount.
+  }, [attemptId, retry, language, gameMode, totalPrice, playerCount, setPaymentId, setPaymentInFlight, setPaymentCompleted])
 
-    processPayment()
-
-    return () => {
-      isActive = false
-      if (navigationTimer) {
-        clearTimeout(navigationTimer)
-      }
-      void hardwareService.paymentTerminal.cancelPayment()
-    }
-  }, [navigate, setPaymentCompleted, totalPrice])
-
-  const handleRetry = async () => {
-    setError(null)
-    setIsProcessing(true)
-
-    try {
-      const result = await hardwareService.paymentTerminal.startPayment(
-        totalPrice,
-        PRICE_CURRENCY
-      )
-
-      if (result.success) {
-        setPaymentCompleted(true)
-        setTimeout(() => {
-          navigate('/name')
-        }, 500)
+  useEffect(() => {
+    if (blocker.state !== 'blocked' || cancelling.current || finished.current) return
+    cancelling.current = true
+    setPhase('cancelling')
+    apiServices.payment.cancelPayment(attemptId).then((result) => {
+      if (finished.current) return
+      if (result.status === 'accepted') {
+        acceptRef.current()
+      } else if (result.status === 'cancelled' || result.status === 'rejected') {
+        finished.current = true
+        allowExit.current = true
+        setPaymentInFlight(false)
+        setPaymentId(null)
+        blocker.proceed()
       } else {
-        setError(copy.payment.failed)
-        setIsProcessing(false)
+        // A card was already presented. Stay here and wait for the charge result.
+        setPhase('processing')
+        blocker.reset()
+        setRetry((value) => value + 1)
       }
-    } catch {
-      setError(copy.payment.error)
-      setIsProcessing(false)
+    }).catch(() => {
+      if (!finished.current) {
+        setPhase('error')
+        blocker.reset()
+      }
+    }).finally(() => { cancelling.current = false })
+  }, [blocker, attemptId, setPaymentId, setPaymentInFlight])
+
+  const handleRetry = () => {
+    if (isProcessing) return
+    allowExit.current = false
+    setPhase('waiting')
+    if (phase === 'error') {
+      // Reattach to the existing attempt; never create another charge on uncertainty.
+      setRetry((value) => value + 1)
+    } else {
+      setAttemptId(crypto.randomUUID())
     }
   }
 
   return (
     <>
-      <BackButton to={backRoute} />
+      <BackButton to={backRoute} disabled={phase === 'cancelling' || phase === 'processing'} />
       <ScreenWrapper>
         <ScreenShell title={copy.payment.title}>
           <div className={styles.paymentContainer}>
@@ -127,7 +156,7 @@ export function PaymentScreen() {
                   <span></span>
                   <span></span>
                 </div>
-                <p className={styles.processingText}>{copy.payment.processing}</p>
+                <p className={styles.processingText}>{phase === 'cancelling' ? copy.payment.cancelling : phase === 'processing' ? copy.payment.cannotCancel : copy.payment.processing}</p>
               </div>
             )}
 
@@ -138,7 +167,7 @@ export function PaymentScreen() {
                   onClick={handleRetry}
                   disabled={isProcessing}
                 >
-                  {copy.payment.retryButton}
+                  {phase === 'error' ? copy.payment.checkButton : copy.payment.retryButton}
                 </button>
               </div>
             )}

@@ -40,3 +40,5 @@
     font-size: 0.82rem;
   }
 }
+
+.backButton:disabled { opacity: 0.45; cursor: not-allowed; }

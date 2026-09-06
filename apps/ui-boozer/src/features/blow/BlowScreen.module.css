@@ -116,3 +116,8 @@
     font-size: 1.6rem;
   }
 }
+
+/* Waiting animation only: the API provides no intermediate sensor progress. */
+.barWaiting { animation: waitingPulse 1s ease-in-out infinite alternate; }
+@keyframes waitingPulse { from { opacity: 0.3; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .barWaiting { animation: none; } }
