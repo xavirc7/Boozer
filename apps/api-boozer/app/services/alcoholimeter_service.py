@@ -2,11 +2,14 @@ import uuid
 import asyncio
 import logging
 from app.services.payment_service import transaction_db
-
-try:
-    import serial
-except ModuleNotFoundError:  # pragma: no cover - fallback for mock/dev mode
-    serial = None
+import smbus2
+import adafruit_dht
+import board
+from app.hardware.alcoholimeter import get_voltage_output
+# try:
+#     import serial
+# except ModuleNotFoundError:  # pragma: no cover - fallback for mock/dev mode
+#     serial = None
 
 logger = logging.getLogger(__name__)
 
@@ -16,44 +19,53 @@ class AlcoholimeterService:
         self.baudrate = 9600
         self.serial_conn = None
         
-        if serial is None:
-            logger.warning("pyserial is not installed. Alcoholimeter will run in mock mode.")
-            return
+        # if serial is None:
+        #     logger.warning("pyserial is not installed. Alcoholimeter will run in mock mode.")
+        #     return
 
-        try:
-            self.serial_conn = serial.Serial(self.port, self.baudrate, timeout=1)
-            logger.info(f"Connected to hardware on {self.port}")
-        except serial.SerialException as e:
-            logger.error(f"Failed to connect to alcoholimeter on {self.port}: {e}")
-            self.serial_conn = None
-    
+        # try:
+        #     self.serial_conn = serial.Serial(self.port, self.baudrate, timeout=1)
+        #     logger.info(f"Connected to hardware on {self.port}")
+        # except serial.SerialException as e:
+        #     logger.error(f"Failed to connect to alcoholimeter on {self.port}: {e}")
+        #     self.serial_conn = None
+
+        # Inicializamos el bus I2C nativo de Linux (Bus 1 es el físico de la Pi)
+        self.bus = smbus2.SMBus(1)
+        # --- Inicialización del DHT22 ---
+        self.dht = adafruit_dht.DHT22(board.D4)
+
     def _read_from_physical_sensor(self) -> float:
         """
         synchronous, blocking function that talks to the hardware.
         """
-        if not self.serial_conn:
-            raise ConnectionError("Hardware not connected.")
+        if self.bus and self.dht:
+            get_voltage_output(self.bus, self.dht)
+            
+        # if not self.serial_conn:
+        #     raise ConnectionError("Hardware not connected.")
 
-        # TODO: Check hardware for the exact start byte command)
-        self.serial_conn.write(b"START_TEST\n")
+        # # TODO: Check hardware for the exact start byte command)
+        # self.serial_conn.write(b"START_TEST\n")
 
-        self.serial_conn.timeout = 30 
+        # self.serial_conn.timeout = 30 
         
-        # 3. Wait and read the response from the machine
-        # Assume the machine sends back a string like: "RESULT:0.045\r\n"
-        raw_bytes = self.serial_conn.readline()
+        # # 3. Wait and read the response from the machine
+        # # Assume the machine sends back a string like: "RESULT:0.045\r\n"
+        # raw_bytes = self.serial_conn.readline()
         
-        if not raw_bytes:
-            raise TimeoutError("User took too long to blow or sensor timed out.")
+        # if not raw_bytes:
+        #     raise TimeoutError("User took too long to blow or sensor timed out.")
 
-        raw_data = raw_bytes.decode('utf-8').strip()
+        # raw_data = raw_bytes.decode('utf-8').strip()
         
-        # TODO: Check hardware's manual
-        if raw_data.startswith("RESULT:"):
-            bac_value = float(raw_data.split(":")[1])
-            return bac_value
-        else:
-            raise ValueError(f"Unexpected data from sensor: {raw_data}")
+        # # TODO: Check hardware's manual
+        # if raw_data.startswith("RESULT:"):
+        #     bac_value = float(raw_data.split(":")[1])
+        #     return bac_value
+        # else:
+        #     raise ValueError(f"Unexpected data from sensor: {raw_data}")
+
 
     def _mock_read_from_physical_sensor(self) -> float:
 
@@ -71,8 +83,8 @@ class AlcoholimeterService:
         logger.info(f"Payment verified. Waking up alcoholimeter. Test ID: {test_id}")
         
         try:
-            # bac_level = await asyncio.to_thread(self._read_from_physical_sensor)
-            bac_level = await asyncio.to_thread(self._mock_read_from_physical_sensor)
+            bac_level = await asyncio.to_thread(self._read_from_physical_sensor)
+            # bac_level = await asyncio.to_thread(self._mock_read_from_physical_sensor)
         except Exception as e:
             logger.error(f"Test failed: {str(e)}")
             raise RuntimeError(f"Hardware failure: {str(e)}")
